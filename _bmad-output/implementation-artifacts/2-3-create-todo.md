@@ -1,6 +1,6 @@
 # Story 2.3: Create Todo
 
-Status: review
+Status: done
 
 ## Story
 
@@ -376,3 +376,12 @@ describe('TodoForm', () => {
 - `frontend/src/components/__tests__/TodoForm.test.ts` (new)
 - `frontend/src/views/HomeView.vue` (modified — wired `TodoForm` + `useCreateTodo`)
 - `_bmad-output/implementation-artifacts/sprint-status.yaml` (modified)
+
+## Senior Developer Review (AI)
+
+### Review Findings
+
+**Patch findings:**
+
+- [x] [Review][Patch] P1 — `useCreateTodo`: `onError` re-derives rollback key from live `filters.value` instead of the key captured in `onMutate` context. Fix: add `key` to the returned context object in `onMutate` and reuse `context.key` in `onError`. [`frontend/src/composables/useTodos.ts` lines 38–42]
+- [x] [Review][Patch] P2 — `TodoForm.vue`: `aria-live="polite"` on the validation error span conflicts with `role="alert"` (which implies `aria-live="assertive"`). Remove `aria-live="polite"` — `role="alert"` alone is correct and sufficient. [`frontend/src/components/TodoForm.vue` line 46]

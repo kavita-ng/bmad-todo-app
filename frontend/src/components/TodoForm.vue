@@ -46,6 +46,6 @@ watch(
     <button type="submit" :aria-disabled="isPending" :disabled="isPending">
       {{ isPending ? 'Adding…' : 'Add' }}
     </button>
-    <span v-if="validationError" aria-live="polite" role="alert">{{ validationError }}</span>
+    <span v-if="validationError" role="alert">{{ validationError }}</span>
   </form>
 </template>

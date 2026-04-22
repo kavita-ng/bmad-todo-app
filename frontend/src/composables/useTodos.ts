@@ -47,11 +47,11 @@ export function useCreateTodo(filters: Ref<TodoFilters>) {
         })
       }
 
-      return { previous }
+      return { previous, key }
     },
     onError: (_err, _vars, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(todoKeys.filtered(filters.value), context.previous)
+      if (context?.previous && context?.key) {
+        queryClient.setQueryData(context.key, context.previous)
       }
     },
     onSettled: () => {
