@@ -1,5 +1,5 @@
 # generated: 2026-04-22
-# last_updated: 2026-04-22
+# last_updated: 2026-04-22 # updated: story 2-1 ready-for-dev, epic-2 in-progress
 # project: bmad-todo-app
 # project_key: NOKEY
 # tracking_system: file-system
@@ -43,15 +43,15 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # ─── Epic 1: Project Foundation ───────────────────────────────────────────
-  epic-1: in-progress
+  epic-1: done
   1-1-initialize-monorepo-structure: done
   1-2-backend-server-infrastructure: done
   1-3-frontend-infrastructure-setup: done
   epic-1-retrospective: optional
 
   # ─── Epic 2: Core Todo Operations ─────────────────────────────────────────
-  epic-2: backlog
-  2-1-database-schema-and-todo-api: backlog
+  epic-2: in-progress
+  2-1-database-schema-and-todo-api: review
   2-2-todo-list-view-with-empty-loading-and-error-states: backlog
   2-3-create-todo: backlog
   2-4-delete-todo: backlog
