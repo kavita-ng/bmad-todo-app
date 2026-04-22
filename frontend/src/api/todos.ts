@@ -16,3 +16,7 @@ export async function createTodo(body: { description: string; tags?: string[] })
     body: JSON.stringify(body),
   })
 }
+
+export async function deleteTodo(id: string): Promise<void> {
+  await fetchApi<void>(`/api/todos/${id}`, { method: 'DELETE' })
+}

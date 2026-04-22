@@ -4,6 +4,8 @@ import StatusBadge from './StatusBadge.vue'
 
 const props = defineProps<{
   todo: Todo
+  onDelete: () => void
+  isDeleting: boolean
 }>()
 
 function formatDate(iso: string): string {
@@ -23,5 +25,14 @@ function formatDate(iso: string): string {
     <ul v-if="props.todo.tags.length > 0">
       <li v-for="tag in props.todo.tags" :key="tag">{{ tag }}</li>
     </ul>
+    <button
+      type="button"
+      aria-label="Delete todo"
+      :aria-disabled="isDeleting"
+      :disabled="isDeleting"
+      @click="props.onDelete()"
+    >
+      {{ isDeleting ? 'Deleting…' : 'Delete' }}
+    </button>
   </div>
 </template>

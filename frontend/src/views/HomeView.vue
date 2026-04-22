@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTodos, useCreateTodo } from '../composables/useTodos.js'
+import { useTodos, useCreateTodo, useDeleteTodo } from '../composables/useTodos.js'
 import { useUiStore } from '../stores/ui.js'
 import TodoList from '../components/TodoList.vue'
 import TodoForm from '../components/TodoForm.vue'
@@ -17,12 +17,20 @@ const { isPending: listPending, isError: listIsError, error: listErr, data } = u
 const todos = computed(() => data.value?.data ?? [])
 
 const { mutate: createTodo, isPending: createPending, error: createErr } = useCreateTodo(filters)
+const { mutate: deleteTodo, variables: deletingId } = useDeleteTodo(filters)
 </script>
 
 <template>
   <main>
     <h1>Todos</h1>
     <TodoForm :on-submit="createTodo" :is-pending="createPending" :error="createErr" />
-    <TodoList :todos="todos" :is-pending="listPending" :is-error="listIsError" :error="listErr" />
+    <TodoList
+      :todos="todos"
+      :is-pending="listPending"
+      :is-error="listIsError"
+      :error="listErr"
+      :on-delete="deleteTodo"
+      :deleting-id="deletingId ?? null"
+    />
   </main>
 </template>

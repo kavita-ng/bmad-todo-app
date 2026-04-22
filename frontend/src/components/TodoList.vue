@@ -7,6 +7,8 @@ defineProps<{
   isPending: boolean
   isError: boolean
   error?: Error | null
+  onDelete: (id: string) => void
+  deletingId: string | null
 }>()
 </script>
 
@@ -16,7 +18,11 @@ defineProps<{
   <p v-else-if="todos.length === 0">No todos yet. Add your first todo above.</p>
   <ul v-else aria-label="Todo list">
     <li v-for="todo in todos" :key="todo.id">
-      <TodoItem :todo="todo" />
+      <TodoItem
+        :todo="todo"
+        :on-delete="() => onDelete(todo.id)"
+        :is-deleting="deletingId === todo.id"
+      />
     </li>
   </ul>
 </template>

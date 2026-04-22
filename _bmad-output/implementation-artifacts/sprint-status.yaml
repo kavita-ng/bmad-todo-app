@@ -54,7 +54,7 @@ development_status:
   2-1-database-schema-and-todo-api: done
   2-2-todo-list-view-with-empty-loading-and-error-states: done
   2-3-create-todo: done
-  2-4-delete-todo: backlog
+  2-4-delete-todo: done
   epic-2-retrospective: optional
 
   # ─── Epic 3: Status Workflow ───────────────────────────────────────────────
