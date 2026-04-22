@@ -11,3 +11,7 @@
 - D2: Data query and count query in `GET /api/todos` are not wrapped in a transaction — inconsistent pagination under concurrent writes; SQLite single-writer mitigates for now; revisit for production scaling
 - D3: Test suite operates against developer's `local.db` — no test-specific DB isolation; spec allows `beforeEach` cleanup; should introduce `DB_FILE_NAME=file:test.db` env for CI isolation
 - D4: No Fastify response schemas on any route — future DB column additions will leak verbatim to API clients; add response schemas for proper serialization control and documentation
+
+## Deferred from: code review of 2-2-todo-list-view-with-empty-loading-and-error-states (2026-04-22)
+
+- D1: `TodoItem.vue` — `new Date(iso)` on a malformed ISO string silently renders "Invalid Date" without throwing; pre-existing, backend-controlled (backend always returns valid ISO 8601 strings)

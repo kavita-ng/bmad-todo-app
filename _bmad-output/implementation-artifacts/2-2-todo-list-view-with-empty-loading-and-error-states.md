@@ -1,6 +1,6 @@
 # Story 2.2: Todo List View with Empty, Loading, and Error States
 
-Status: review
+Status: done
 
 ## Story
 
@@ -426,3 +426,16 @@ Remove scaffold imports `HelloWorld`, `RouterLink`, all logo/nav markup.
 - `frontend/src/App.vue` (modified)
 - `frontend/src/router/index.ts` (modified)
 - `_bmad-output/implementation-artifacts/sprint-status.yaml` (modified)
+
+## Senior Developer Review (AI)
+
+### Review Findings
+
+**Patch findings:**
+
+- [x] [Review][Patch] P1 — `TodoList.vue`: `error` prop typed as `unknown` and never read; error state shows hardcoded fallback only, losing actual error message. Fix: change prop type to `Error | null` and render `{{ error?.message || 'Failed to load todos. Please try again.' }}` in the error div. [`frontend/src/components/TodoList.vue` lines 4, 9, 16]
+- [x] [Review][Patch] P2 — `App.vue`: dead `<style scoped>` block retains CSS for removed scaffold elements (`header`, `.logo`, `.wrapper`, media query). [`frontend/src/App.vue` style block]
+
+**Deferred findings:**
+
+- [x] [Review][Defer] D1 — `TodoItem.vue`: `new Date(iso)` on a malformed ISO string silently renders "Invalid Date" without throwing. Pre-existing, backend-controlled — backend always returns valid ISO strings. [`frontend/src/components/TodoItem.vue:16`] — deferred, pre-existing
