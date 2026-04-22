@@ -15,3 +15,7 @@
 ## Deferred from: code review of 2-2-todo-list-view-with-empty-loading-and-error-states (2026-04-22)
 
 - D1: `TodoItem.vue` — `new Date(iso)` on a malformed ISO string silently renders "Invalid Date" without throwing; pre-existing, backend-controlled (backend always returns valid ISO 8601 strings)
+
+## Deferred from: code review of 2-4-delete-todo (2026-04-22)
+
+- D1: Concurrent deletes — `variables` from `useMutation` only tracks the last invocation; if two deletes are triggered before the first settles, only the last-triggered todo shows `isDeleting: true`; pre-existing TanStack Query v5 `variables` limitation

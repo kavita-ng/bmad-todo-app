@@ -17,13 +17,14 @@ const { isPending: listPending, isError: listIsError, error: listErr, data } = u
 const todos = computed(() => data.value?.data ?? [])
 
 const { mutate: createTodo, isPending: createPending, error: createErr } = useCreateTodo(filters)
-const { mutate: deleteTodo, variables: deletingId } = useDeleteTodo(filters)
+const { mutate: deleteTodo, variables: deletingId, error: deleteErr } = useDeleteTodo(filters)
 </script>
 
 <template>
   <main>
     <h1>Todos</h1>
     <TodoForm :on-submit="createTodo" :is-pending="createPending" :error="createErr" />
+    <div v-if="deleteErr" role="alert">{{ deleteErr.message }}</div>
     <TodoList
       :todos="todos"
       :is-pending="listPending"

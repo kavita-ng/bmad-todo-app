@@ -48,4 +48,21 @@ describe('TodoList', () => {
     expect(wrapper.findAll('li')).toHaveLength(1)
     expect(wrapper.text()).toContain('Write tests')
   })
+
+  it('passes onDelete and isDeleting props to TodoItem', () => {
+    const onDelete = vi.fn()
+    const wrapper = mount(TodoList, {
+      props: {
+        todos: [baseTodo],
+        isPending: false,
+        isError: false,
+        onDelete,
+        deletingId: baseTodo.id,
+      },
+    })
+    const item = wrapper.findComponent({ name: 'TodoItem' })
+    expect(item.props('isDeleting')).toBe(true)
+    item.props('onDelete')()
+    expect(onDelete).toHaveBeenCalledOnce()
+  })
 })

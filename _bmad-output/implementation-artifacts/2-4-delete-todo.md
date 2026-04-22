@@ -352,3 +352,9 @@ n/a
 - `frontend/src/views/HomeView.vue` — wired `useDeleteTodo`, passed props to `TodoList`
 - `frontend/src/components/__tests__/TodoItem.test.ts` — updated fixtures, added 3 delete tests
 - `frontend/src/components/__tests__/TodoList.test.ts` — updated fixtures with new required props
+
+## Review Findings
+
+- [x] [Review][Patch] P1: Delete error not shown to user — `error` from `useDeleteTodo` is not extracted or displayed in `HomeView.vue`; AC#3 requires "an error message is shown" when delete fails [frontend/src/views/HomeView.vue]
+- [x] [Review][Patch] P2: Task 6.2 incomplete — `TodoList.test.ts` has no test verifying `onDelete`/`isDeleting` prop threading to `TodoItem`; existing fixtures updated but new test not added [frontend/src/components/__tests__/TodoList.test.ts]
+- [x] [Review][Defer] D1: Concurrent deletes — `variables` from `useMutation` only tracks last invocation; rapid multi-item deletes show `isDeleting` only on the last triggered item — deferred, pre-existing TanStack Query v5 limitation
