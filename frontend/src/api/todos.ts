@@ -9,3 +9,10 @@ export async function getTodos(filters: TodoFilters = {}): Promise<PaginatedResp
   const query = params.toString()
   return fetchApi<PaginatedResponse<Todo>>(`/api/todos${query ? `?${query}` : ''}`)
 }
+
+export async function createTodo(body: { description: string; tags?: string[] }): Promise<Todo> {
+  return fetchApi<Todo>('/api/todos', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
