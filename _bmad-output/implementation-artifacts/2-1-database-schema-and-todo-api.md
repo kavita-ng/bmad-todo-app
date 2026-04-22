@@ -1,6 +1,6 @@
 # Story 2.1: Database Schema and Todo API
 
-Status: review
+Status: done
 
 ## Story
 
@@ -349,3 +349,21 @@ N/A
 - `backend/package.json` — MODIFIED (added db:generate, db:migrate scripts)
 - `backend/src/__tests__/todos.routes.test.ts` — NEW
 - `backend/drizzle/migrations/0000_lucky_quasar.sql` — NEW (generated)
+
+### Review Findings
+
+- [x] [Review][Patch] P1: Double quotes + semicolons in `app.ts` violate single-quote project style [backend/src/app.ts:4,22]
+- [x] [Review][Patch] P2: `STATUS_ENUM` copy-pasted in routes instead of derived from schema type [backend/src/routes/todos.routes.ts:7]
+- [x] [Review][Patch] P3: Tag items accept commas in JSON schema — comma in tag value causes round-trip corruption [backend/src/routes/todos.routes.ts:87]
+- [x] [Review][Patch] P4: `description` field missing `maxLength` — trivial resource-exhaustion vector [backend/src/routes/todos.routes.ts:83]
+- [x] [Review][Patch] P5: Whitespace-only description (e.g. `"   "`) passes `minLength: 1` — invalid data stored [backend/src/routes/todos.routes.ts:83]
+- [x] [Review][Patch] P6: Whitespace-only and empty-string tag items not rejected by JSON schema or tags utility [backend/src/routes/todos.routes.ts:87, backend/src/utils/tags.ts]
+- [x] [Review][Patch] P7: `const now = new Date(); const nowMs = now.getTime()` — use `Date.now()` directly [backend/src/routes/todos.routes.ts:92-93]
+- [x] [Review][Patch] P8: DELETE `params` schema missing `additionalProperties: false` — inconsistent input hardening [backend/src/routes/todos.routes.ts:117-124]
+- [x] [Review][Patch] P9: `page` query param has no `maximum` — unbounded offset possible [backend/src/routes/todos.routes.ts:22]
+- [x] [Review][Patch] P10: No test covering invalid `?status=bogus` → 400 — sole AJV guard is untested [backend/src/__tests__/todos.routes.test.ts]
+- [x] [Review][Patch] P11: 400 tests assert only `statusCode` — AC6 error body shape unverified [backend/src/__tests__/todos.routes.test.ts:58-76]
+- [x] [Review][Defer] D1: `updatedAt` frozen at insert-time — no `$onUpdate` in schema [backend/src/db/schema.ts:14-17] — deferred, pre-existing; scoped to Story 3.1 PATCH route
+- [x] [Review][Defer] D2: Data query and count query are not in a transaction — inconsistent pagination under concurrent writes [backend/src/routes/todos.routes.ts:36-49] — deferred, pre-existing; SQLite single-writer mitigates; post-MVP concern
+- [x] [Review][Defer] D3: Test suite operates against developer's `local.db` — no test-specific DB isolation [backend/src/__tests__/todos.routes.test.ts] — deferred, pre-existing; spec explicitly allows `beforeEach` cleanup approach
+- [x] [Review][Defer] D4: No response schemas on any route — future DB column leakage risk [backend/src/routes/todos.routes.ts] — deferred, pre-existing; not required by story spec; architecture improvement

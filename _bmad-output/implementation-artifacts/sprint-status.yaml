@@ -51,7 +51,7 @@ development_status:
 
   # ─── Epic 2: Core Todo Operations ─────────────────────────────────────────
   epic-2: in-progress
-  2-1-database-schema-and-todo-api: review
+  2-1-database-schema-and-todo-api: done
   2-2-todo-list-view-with-empty-loading-and-error-states: backlog
   2-3-create-todo: backlog
   2-4-delete-todo: backlog

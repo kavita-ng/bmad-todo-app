@@ -53,6 +53,7 @@ describe('POST /api/todos', () => {
     })
 
     expect(res.statusCode).toBe(400)
+    expect(res.json().error.code).toBe("VALIDATION_ERROR");
   })
 
   it('returns 400 when description is empty string', async () => {
@@ -63,6 +64,7 @@ describe('POST /api/todos', () => {
     })
 
     expect(res.statusCode).toBe(400)
+    expect(res.json().error.code).toBe("VALIDATION_ERROR");
   })
 })
 
@@ -110,6 +112,16 @@ describe('GET /api/todos', () => {
     expect(data[0].description).toBe('Second')
     expect(data[1].description).toBe('First')
   })
+
+  it("returns 400 for invalid status query param", async () => {
+    const res = await app.inject({
+      method: "GET",
+      url: "/api/todos?status=bogus",
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error.code).toBe("VALIDATION_ERROR");
+  });
 
   it('filters by status', async () => {
     await app.inject({
