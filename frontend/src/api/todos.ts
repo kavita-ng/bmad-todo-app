@@ -1,0 +1,11 @@
+import { fetchApi } from './client.js'
+import type { Todo, TodoFilters, PaginatedResponse } from '../types/todo.js'
+
+export async function getTodos(filters: TodoFilters = {}): Promise<PaginatedResponse<Todo>> {
+  const params = new URLSearchParams()
+  if (filters.status) params.set('status', filters.status)
+  if (filters.page) params.set('page', String(filters.page))
+  if (filters.limit) params.set('limit', String(filters.limit))
+  const query = params.toString()
+  return fetchApi<PaginatedResponse<Todo>>(`/api/todos${query ? `?${query}` : ''}`)
+}
