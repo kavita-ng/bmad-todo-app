@@ -1,0 +1,12 @@
+_bmad
+
+.github
+
+node_modules/
+dist/
+.env
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+coverage/
