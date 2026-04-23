@@ -11,9 +11,22 @@ const cases: Array<[TodoStatus, string]> = [
   ['completed', 'Completed'],
 ]
 
+const activeCases: TodoStatus[] = ['draft', 'ready', 'in_progress']
+const terminalCases: TodoStatus[] = ['backlog', 'completed']
+
 describe('StatusBadge', () => {
   it.each(cases)('renders "%s" as "%s"', (status, label) => {
     const wrapper = mount(StatusBadge, { props: { status } })
     expect(wrapper.text()).toBe(label)
+  })
+
+  it.each(activeCases)('active status "%s" renders with font-medium class', (status) => {
+    const wrapper = mount(StatusBadge, { props: { status } })
+    expect(wrapper.find('span').classes()).toContain('font-medium')
+  })
+
+  it.each(terminalCases)('terminal status "%s" renders with font-normal class', (status) => {
+    const wrapper = mount(StatusBadge, { props: { status } })
+    expect(wrapper.find('span').classes()).toContain('font-normal')
   })
 })

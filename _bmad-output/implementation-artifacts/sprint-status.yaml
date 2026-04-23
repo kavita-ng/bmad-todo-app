@@ -60,7 +60,7 @@ development_status:
   # ─── Epic 3: Status Workflow ───────────────────────────────────────────────
   epic-3: in-progress
   3-1-status-update-api: done
-  3-2-status-display-statusbadge-component: backlog
+  3-2-status-display-statusbadge-component: done
   3-3-status-change-interaction: backlog
   epic-3-retrospective: optional
 
