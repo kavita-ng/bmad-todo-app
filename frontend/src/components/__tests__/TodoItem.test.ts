@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import TodoItem from '../TodoItem.vue'
-import type { Todo } from '../../types/todo.js'
+import type { Todo, TodoStatus } from '../../types/todo.js'
 
 const todo: Todo = {
   id: '1',
@@ -14,9 +14,9 @@ const todo: Todo = {
 
 const baseProps = {
   todo,
-  onDelete: vi.fn(),
+  onDelete: vi.fn<() => void>(),
   isDeleting: false,
-  onStatusChange: vi.fn(),
+  onStatusChange: vi.fn<(status: TodoStatus) => void>(),
   isUpdatingStatus: false,
 }
 
@@ -51,7 +51,7 @@ describe('TodoItem', () => {
   })
 
   it('calls onDelete when delete button is clicked', async () => {
-    const onDelete = vi.fn()
+    const onDelete = vi.fn<() => void>()
     const wrapper = mount(TodoItem, { props: { ...baseProps, onDelete } })
     await wrapper.find('button[aria-label="Delete todo"]').trigger('click')
     expect(onDelete).toHaveBeenCalledOnce()
@@ -69,7 +69,7 @@ describe('TodoItem', () => {
   })
 
   it('calls onStatusChange when select changes', async () => {
-    const onStatusChange = vi.fn()
+    const onStatusChange = vi.fn<(status: TodoStatus) => void>()
     const wrapper = mount(TodoItem, { props: { ...baseProps, onStatusChange } })
     await wrapper.find('select').setValue('ready')
     expect(onStatusChange).toHaveBeenCalledWith('ready')
