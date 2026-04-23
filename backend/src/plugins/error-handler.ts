@@ -29,7 +29,7 @@ async function errorHandlerPlugin(app: FastifyInstance) {
         message:
           statusCode < 500
             ? (error.message ?? "An unexpected error occurred")
-            : error.message || "Internal server error",
+            : "An unexpected error occurred",
       },
     });
   });
