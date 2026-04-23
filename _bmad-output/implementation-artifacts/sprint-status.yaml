@@ -1,5 +1,5 @@
 # generated: 2026-04-22
-# last_updated: 2026-04-22 # updated: story 2-1 ready-for-dev, epic-2 in-progress
+# last_updated: 2026-04-23 # updated: story 4-2 done
 # project: bmad-todo-app
 # project_key: NOKEY
 # tracking_system: file-system
@@ -35,8 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-22
-last_updated: 2026-04-22
-project: bmad-todo-app
+last_updated: 2026-04-23
 project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
@@ -65,13 +64,13 @@ development_status:
   epic-3-retrospective: optional
 
   # ─── Epic 4: Responsive, Accessible, Production-Ready ─────────────────────
-  epic-4: backlog
-  4-1-responsive-layout: backlog
-  4-2-keyboard-navigation-and-screen-reader-support: backlog
-  4-3-performance-validation: backlog
+  epic-4: in-progress
+  4-1-responsive-layout: done
+  4-2-keyboard-navigation-and-screen-reader-support: done
+  4-3-performance-validation: done
   epic-4-retrospective: optional
 
   # ─── Epic 5: Developer Documentation ──────────────────────────────────────
-  epic-5: backlog
-  5-1-project-readme: backlog
+  epic-5: done
+  5-1-project-readme: done
   epic-5-retrospective: optional
