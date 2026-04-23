@@ -176,3 +176,7 @@ n/a
 ### File List
 - `frontend/src/components/StatusBadge.vue` — added `STATUS_CLASSES` map, `data-status` attr, Tailwind badge classes
 - `frontend/src/components/__tests__/StatusBadge.test.ts` — added 5 new tests (3 active + 2 terminal font-weight checks)
+
+## Review Findings
+
+✅ Clean review — all layers passed. 3 dismissed as noise (font-normal cascade correct; array class binding correct; `find('span')` vs root wrapper — functional equivalence).
