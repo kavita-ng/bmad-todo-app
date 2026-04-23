@@ -311,3 +311,8 @@ n/a
 - `backend/src/types/todo.ts` — added `PatchTodoBody` interface
 - `backend/src/routes/todos.routes.ts` — added `PATCH /api/todos/:id` handler; updated import
 - `backend/src/__tests__/todos.routes.test.ts` — added `describe('PATCH /api/todos/:id', ...)` with 5 tests
+
+## Review Findings
+
+- [x] [Review][Patch] P1: Mixed quote style in routes file — PATCH handler and its import use double quotes while surrounding GET/POST/DELETE handlers use single quotes [backend/src/routes/todos.routes.ts]
+- [x] [Review][Defer] D1: SELECT→UPDATE gap — if a todo is deleted between the pre-check SELECT and the UPDATE, `updated` from `.returning()` could be undefined; `updated.id` would throw; SQLite single-writer eliminates the race in practice — deferred, pre-existing architecture constraint

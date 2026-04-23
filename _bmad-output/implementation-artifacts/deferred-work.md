@@ -19,3 +19,7 @@
 ## Deferred from: code review of 2-4-delete-todo (2026-04-22)
 
 - D1: Concurrent deletes — `variables` from `useMutation` only tracks the last invocation; if two deletes are triggered before the first settles, only the last-triggered todo shows `isDeleting: true`; pre-existing TanStack Query v5 `variables` limitation
+
+## Deferred from: code review of 3-1-status-update-api (2026-04-23)
+
+- D1: SELECT→UPDATE gap in PATCH handler — if a todo is deleted between the pre-check SELECT and the UPDATE, the `.returning()` array will be empty and `updated.id` will throw; SQLite single-writer model eliminates the race in practice; revisit for any future DB with concurrent writers
