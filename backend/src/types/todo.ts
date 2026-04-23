@@ -19,3 +19,7 @@ export interface UpdateTodoBody {
   description?: string
   tags?: string[]
 }
+
+export interface PatchTodoBody {
+  status: TodoStatus;
+}

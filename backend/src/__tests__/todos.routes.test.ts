@@ -231,3 +231,98 @@ describe('Data persistence', () => {
     expect(res.json().data[0].description).toBe('Persistent todo')
   })
 })
+
+describe("PATCH /api/todos/:id", () => {
+  it("returns 200 with updated todo when status is valid", async () => {
+    const created = await app.inject({
+      method: "POST",
+      url: "/api/todos",
+      payload: { description: "Test todo" },
+    });
+    const { id } = created.json();
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/todos/${id}`,
+      payload: { status: "in_progress" },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.id).toBe(id);
+    expect(body.status).toBe("in_progress");
+    expect(body.description).toBe("Test todo");
+    expect(body.createdAt).toBeDefined();
+    expect(body.updatedAt).toBeDefined();
+  });
+
+  it("updatedAt is greater than createdAt after update", async () => {
+    const created = await app.inject({
+      method: "POST",
+      url: "/api/todos",
+      payload: { description: "Timestamp test" },
+    });
+    const { id, createdAt } = created.json();
+
+    await new Promise((r) => setTimeout(r, 5));
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/todos/${id}`,
+      payload: { status: "ready" },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const { updatedAt } = res.json();
+    expect(new Date(updatedAt).getTime()).toBeGreaterThan(
+      new Date(createdAt).getTime(),
+    );
+  });
+
+  it("returns 400 when status value is invalid", async () => {
+    const created = await app.inject({
+      method: "POST",
+      url: "/api/todos",
+      payload: { description: "Test todo" },
+    });
+    const { id } = created.json();
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/todos/${id}`,
+      payload: { status: "done" },
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("returns 400 when status field is missing", async () => {
+    const created = await app.inject({
+      method: "POST",
+      url: "/api/todos",
+      payload: { description: "Test todo" },
+    });
+    const { id } = created.json();
+
+    const res = await app.inject({
+      method: "PATCH",
+      url: `/api/todos/${id}`,
+      payload: {},
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("returns 404 when id does not exist", async () => {
+    const res = await app.inject({
+      method: "PATCH",
+      url: "/api/todos/nonexistent-id",
+      payload: { status: "ready" },
+    });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.json().error.code).toBe("NOT_FOUND");
+  });
+});

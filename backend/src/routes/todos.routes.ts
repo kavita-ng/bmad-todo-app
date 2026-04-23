@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { db } from '../db/connection.js'
 import { todos } from '../db/schema.js'
 import { serializeTags, deserializeTags } from '../utils/tags.js'
-import type { CreateTodoBody } from '../types/todo.js'
+import type { CreateTodoBody, PatchTodoBody } from "../types/todo.js";
 import { eq, desc, count } from 'drizzle-orm'
 
 const STATUS_ENUM = todos.status.enumValues;
@@ -156,6 +156,62 @@ export async function todosRoutes(app: FastifyInstance) {
       }
 
       return reply.code(204).send();
+    },
+  );
+
+  // PATCH /api/todos/:id
+  app.patch(
+    "/todos/:id",
+    {
+      schema: {
+        params: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: { type: "string" },
+          },
+          additionalProperties: false,
+        },
+        body: {
+          type: "object",
+          required: ["status"],
+          properties: {
+            status: { type: "string", enum: STATUS_ENUM },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: string };
+      const { status } = request.body as PatchTodoBody;
+
+      const existing = await db
+        .select()
+        .from(todos)
+        .where(eq(todos.id, id))
+        .limit(1);
+
+      if (existing.length === 0) {
+        return reply.code(404).send({
+          error: { code: "NOT_FOUND", message: "Todo not found" },
+        });
+      }
+
+      const [updated] = await db
+        .update(todos)
+        .set({ status, updatedAt: Date.now() })
+        .where(eq(todos.id, id))
+        .returning();
+
+      return {
+        id: updated.id,
+        description: updated.description,
+        status: updated.status,
+        tags: deserializeTags(updated.tags),
+        createdAt: new Date(updated.createdAt).toISOString(),
+        updatedAt: new Date(updated.updatedAt).toISOString(),
+      };
     },
   );
 }
