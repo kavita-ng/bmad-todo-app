@@ -61,7 +61,7 @@ development_status:
   epic-3: in-progress
   3-1-status-update-api: done
   3-2-status-display-statusbadge-component: done
-  3-3-status-change-interaction: backlog
+  3-3-status-change-interaction: done
   epic-3-retrospective: optional
 
   # ─── Epic 4: Responsive, Accessible, Production-Ready ─────────────────────

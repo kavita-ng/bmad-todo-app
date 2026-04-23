@@ -1,5 +1,5 @@
 import { fetchApi } from './client.js'
-import type { Todo, TodoFilters, PaginatedResponse } from '../types/todo.js'
+import type { Todo, TodoStatus, TodoFilters, PaginatedResponse } from '../types/todo.js'
 
 export async function getTodos(filters: TodoFilters = {}): Promise<PaginatedResponse<Todo>> {
   const params = new URLSearchParams()
@@ -19,4 +19,11 @@ export async function createTodo(body: { description: string; tags?: string[] })
 
 export async function deleteTodo(id: string): Promise<void> {
   await fetchApi<void>(`/api/todos/${id}`, { method: 'DELETE' })
+}
+
+export async function patchTodoStatus(id: string, status: TodoStatus): Promise<Todo> {
+  return fetchApi<Todo>(`/api/todos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  })
 }

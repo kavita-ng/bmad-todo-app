@@ -1,8 +1,8 @@
 import { computed } from 'vue'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { Ref } from 'vue'
-import { getTodos, createTodo, deleteTodo } from '../api/todos.js'
-import type { Todo, TodoFilters, PaginatedResponse } from '../types/todo.js'
+import { getTodos, createTodo, deleteTodo, patchTodoStatus } from '../api/todos.js'
+import type { Todo, TodoStatus, TodoFilters, PaginatedResponse } from '../types/todo.js'
 
 export const todoKeys = {
   all: ['todos'] as const,
@@ -79,6 +79,37 @@ export function useDeleteTodo(filters: Ref<TodoFilters>) {
             ...previous.pagination,
             total: Math.max(0, previous.pagination.total - 1),
           },
+        })
+      }
+
+      return { previous, key }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous && context?.key) {
+        queryClient.setQueryData(context.key, context.previous)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: todoKeys.all })
+    },
+  })
+}
+
+export function useUpdateTodoStatus(filters: Ref<TodoFilters>) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: TodoStatus }) => patchTodoStatus(id, status),
+    onMutate: async ({ id, status }) => {
+      await queryClient.cancelQueries({ queryKey: todoKeys.all })
+
+      const key = todoKeys.filtered(filters.value)
+      const previous = queryClient.getQueryData<PaginatedResponse<Todo>>(key)
+
+      if (previous) {
+        queryClient.setQueryData<PaginatedResponse<Todo>>(key, {
+          ...previous,
+          data: previous.data.map((t) => (t.id === id ? { ...t, status } : t)),
         })
       }
 

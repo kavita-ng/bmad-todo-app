@@ -12,37 +12,41 @@ const baseTodo: Todo = {
   updatedAt: '2026-04-22T10:00:00.000Z',
 }
 
+const baseProps = {
+  todos: [] as Todo[],
+  isPending: false,
+  isError: false,
+  onDelete: vi.fn(),
+  deletingId: null,
+  onStatusChange: vi.fn(),
+  updatingStatusId: null,
+}
+
 describe('TodoList', () => {
   it('shows loading state when isPending is true', () => {
     const wrapper = mount(TodoList, {
-      props: { todos: [], isPending: true, isError: false, onDelete: vi.fn(), deletingId: null },
+      props: { ...baseProps, isPending: true },
     })
     expect(wrapper.find('[role="status"]').exists()).toBe(true)
   })
 
   it('shows error state when isError is true', () => {
     const wrapper = mount(TodoList, {
-      props: { todos: [], isPending: false, isError: true, onDelete: vi.fn(), deletingId: null },
+      props: { ...baseProps, isError: true },
     })
     expect(wrapper.find('[role="alert"]').exists()).toBe(true)
   })
 
   it('shows empty state when todos array is empty and not loading/error', () => {
     const wrapper = mount(TodoList, {
-      props: { todos: [], isPending: false, isError: false, onDelete: vi.fn(), deletingId: null },
+      props: baseProps,
     })
     expect(wrapper.text()).toContain('No todos yet')
   })
 
   it('renders list items when todos are provided', () => {
     const wrapper = mount(TodoList, {
-      props: {
-        todos: [baseTodo],
-        isPending: false,
-        isError: false,
-        onDelete: vi.fn(),
-        deletingId: null,
-      },
+      props: { ...baseProps, todos: [baseTodo] },
     })
     expect(wrapper.find('ul').exists()).toBe(true)
     expect(wrapper.findAll('li')).toHaveLength(1)
@@ -53,9 +57,8 @@ describe('TodoList', () => {
     const onDelete = vi.fn()
     const wrapper = mount(TodoList, {
       props: {
+        ...baseProps,
         todos: [baseTodo],
-        isPending: false,
-        isError: false,
         onDelete,
         deletingId: baseTodo.id,
       },

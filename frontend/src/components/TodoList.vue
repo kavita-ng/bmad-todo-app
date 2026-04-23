@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Todo } from '../types/todo.js'
+import type { Todo, TodoStatus } from '../types/todo.js'
 import TodoItem from './TodoItem.vue'
 
 defineProps<{
@@ -9,6 +9,8 @@ defineProps<{
   error?: Error | null
   onDelete: (id: string) => void
   deletingId: string | null
+  onStatusChange: (id: string, status: TodoStatus) => void
+  updatingStatusId: string | null
 }>()
 </script>
 
@@ -22,6 +24,8 @@ defineProps<{
         :todo="todo"
         :on-delete="() => onDelete(todo.id)"
         :is-deleting="deletingId === todo.id"
+        :on-status-change="(status) => onStatusChange(todo.id, status)"
+        :is-updating-status="updatingStatusId === todo.id"
       />
     </li>
   </ul>

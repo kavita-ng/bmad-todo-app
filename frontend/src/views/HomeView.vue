@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useTodos, useCreateTodo, useDeleteTodo } from '../composables/useTodos.js'
+import { useTodos, useCreateTodo, useDeleteTodo, useUpdateTodoStatus } from '../composables/useTodos.js'
 import { useUiStore } from '../stores/ui.js'
 import TodoList from '../components/TodoList.vue'
 import TodoForm from '../components/TodoForm.vue'
@@ -18,6 +18,8 @@ const todos = computed(() => data.value?.data ?? [])
 
 const { mutate: createTodo, isPending: createPending, error: createErr } = useCreateTodo(filters)
 const { mutate: deleteTodo, variables: deletingId, error: deleteErr } = useDeleteTodo(filters)
+const { mutate: updateStatus, variables: updatingStatusVars, error: updateStatusErr } = useUpdateTodoStatus(filters)
+const updatingStatusId = computed(() => updatingStatusVars.value?.id ?? null)
 </script>
 
 <template>
@@ -25,6 +27,7 @@ const { mutate: deleteTodo, variables: deletingId, error: deleteErr } = useDelet
     <h1>Todos</h1>
     <TodoForm :on-submit="createTodo" :is-pending="createPending" :error="createErr" />
     <div v-if="deleteErr" role="alert">{{ deleteErr.message }}</div>
+    <div v-if="updateStatusErr" role="alert">{{ updateStatusErr.message }}</div>
     <TodoList
       :todos="todos"
       :is-pending="listPending"
@@ -32,6 +35,8 @@ const { mutate: deleteTodo, variables: deletingId, error: deleteErr } = useDelet
       :error="listErr"
       :on-delete="deleteTodo"
       :deleting-id="deletingId ?? null"
+      :on-status-change="(id, status) => updateStatus({ id, status })"
+      :updating-status-id="updatingStatusId"
     />
   </main>
 </template>

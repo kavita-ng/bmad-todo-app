@@ -12,19 +12,27 @@ const todo: Todo = {
   updatedAt: '2026-04-22T10:00:00.000Z',
 }
 
+const baseProps = {
+  todo,
+  onDelete: vi.fn(),
+  isDeleting: false,
+  onStatusChange: vi.fn(),
+  isUpdatingStatus: false,
+}
+
 describe('TodoItem', () => {
   it('renders the description', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: baseProps })
     expect(wrapper.text()).toContain('Buy groceries')
   })
 
   it('renders the status label via StatusBadge', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: baseProps })
     expect(wrapper.text()).toContain('In Progress')
   })
 
   it('renders a human-readable created date', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: baseProps })
     // Apr 22, 2026 (en-US locale)
     expect(wrapper.find('time').exists()).toBe(true)
     expect(wrapper.find('time').attributes('datetime')).toBe('2026-04-22T10:00:00.000Z')
@@ -32,25 +40,43 @@ describe('TodoItem', () => {
   })
 
   it('renders tags when present', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: baseProps })
     expect(wrapper.text()).toContain('errands')
     expect(wrapper.text()).toContain('personal')
   })
 
   it('renders a delete button', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: baseProps })
     expect(wrapper.find('button[aria-label="Delete todo"]').exists()).toBe(true)
   })
 
   it('calls onDelete when delete button is clicked', async () => {
     const onDelete = vi.fn()
-    const wrapper = mount(TodoItem, { props: { todo, onDelete, isDeleting: false } })
+    const wrapper = mount(TodoItem, { props: { ...baseProps, onDelete } })
     await wrapper.find('button[aria-label="Delete todo"]').trigger('click')
     expect(onDelete).toHaveBeenCalledOnce()
   })
 
   it('disables delete button when isDeleting is true', () => {
-    const wrapper = mount(TodoItem, { props: { todo, onDelete: vi.fn(), isDeleting: true } })
+    const wrapper = mount(TodoItem, { props: { ...baseProps, isDeleting: true } })
     expect(wrapper.find('button[aria-label="Delete todo"]').attributes('disabled')).toBeDefined()
+  })
+
+  it('renders a select with 5 status options', () => {
+    const wrapper = mount(TodoItem, { props: baseProps })
+    expect(wrapper.find('select[aria-label="Change status"]').exists()).toBe(true)
+    expect(wrapper.findAll('option')).toHaveLength(5)
+  })
+
+  it('calls onStatusChange when select changes', async () => {
+    const onStatusChange = vi.fn()
+    const wrapper = mount(TodoItem, { props: { ...baseProps, onStatusChange } })
+    await wrapper.find('select').setValue('ready')
+    expect(onStatusChange).toHaveBeenCalledWith('ready')
+  })
+
+  it('disables select when isUpdatingStatus is true', () => {
+    const wrapper = mount(TodoItem, { props: { ...baseProps, isUpdatingStatus: true } })
+    expect(wrapper.find('select').attributes('disabled')).toBeDefined()
   })
 })
