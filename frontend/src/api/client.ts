@@ -31,7 +31,8 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
     response = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        // Only set Content-Type for requests that carry a body; DELETE/GET have no body
+        ...(options.body != null ? { 'Content-Type': 'application/json' } : {}),
         ...callerHeaders,
       },
     })

@@ -1,7 +1,4 @@
 _bmad
-
-.github
-
 node_modules/
 dist/
 .env
@@ -10,3 +7,6 @@ dist/
 *.db-wal
 .DS_Store
 coverage/
+test-results/
+playwright-report/
+.github/skills/

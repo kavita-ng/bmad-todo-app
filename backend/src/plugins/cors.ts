@@ -8,12 +8,13 @@ async function corsPlugin(app: FastifyInstance) {
     origin: (origin, cb) => {
       // Allow same-origin requests (no Origin header) and the configured origin
       if (!origin || origin === allowedOrigin) {
-        cb(null, true)
+        cb(null, true);
       } else {
-        cb(null, false)
+        cb(null, false);
       }
     },
-  })
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  });
 }
 
 export default fp(corsPlugin)

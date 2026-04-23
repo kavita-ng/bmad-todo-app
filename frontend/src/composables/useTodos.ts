@@ -50,6 +50,7 @@ export function useCreateTodo(filters: Ref<TodoFilters>) {
       return { previous, key }
     },
     onError: (_err, _vars, context) => {
+      console.error('Error creating todo:', _err)
       if (context?.previous && context?.key) {
         queryClient.setQueryData(context.key, context.previous)
       }

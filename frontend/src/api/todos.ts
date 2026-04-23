@@ -11,6 +11,7 @@ export async function getTodos(filters: TodoFilters = {}): Promise<PaginatedResp
 }
 
 export async function createTodo(body: { description: string; tags?: string[] }): Promise<Todo> {
+  console.log('@@ API: Creating todo with body', body)
   return fetchApi<Todo>('/api/todos', {
     method: 'POST',
     body: JSON.stringify(body),
