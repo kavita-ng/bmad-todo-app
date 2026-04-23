@@ -4,7 +4,7 @@ import TodoForm from '../TodoForm.vue'
 
 describe('TodoForm', () => {
   it('shows validation error and blocks submission when input is empty', async () => {
-    const onSubmit = vi.fn()
+    const onSubmit = vi.fn<(description: string) => void>()
     const wrapper = mount(TodoForm, {
       props: { onSubmit, isPending: false },
     })
@@ -14,7 +14,7 @@ describe('TodoForm', () => {
   })
 
   it('calls onSubmit with trimmed description and clears input on valid submit', async () => {
-    const onSubmit = vi.fn()
+    const onSubmit = vi.fn<(description: string) => void>()
     const wrapper = mount(TodoForm, {
       props: { onSubmit, isPending: false },
     })
@@ -26,13 +26,13 @@ describe('TodoForm', () => {
 
   it('disables submit button when isPending is true', () => {
     const wrapper = mount(TodoForm, {
-      props: { onSubmit: vi.fn(), isPending: true },
+      props: { onSubmit: vi.fn<(description: string) => void>(), isPending: true },
     })
     expect(wrapper.find('button').attributes('disabled')).toBeDefined()
   })
 
   it('restores input when error prop changes to truthy after submit', async () => {
-    const onSubmit = vi.fn()
+    const onSubmit = vi.fn<(description: string) => void>()
     const wrapper = mount(TodoForm, {
       props: { onSubmit, isPending: false, error: null },
     })

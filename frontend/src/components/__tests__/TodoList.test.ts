@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { describe, it, expect, vi } from 'vitest'
 import TodoList from '../TodoList.vue'
-import type { Todo } from '../../types/todo.js'
+import type { Todo, TodoStatus } from '../../types/todo.js'
 
 const baseTodo: Todo = {
   id: '1',
@@ -16,9 +16,9 @@ const baseProps = {
   todos: [] as Todo[],
   isPending: false,
   isError: false,
-  onDelete: vi.fn(),
+  onDelete: vi.fn<(id: string) => void>(),
   deletingId: null,
-  onStatusChange: vi.fn(),
+  onStatusChange: vi.fn<(id: string, status: TodoStatus) => void>(),
   updatingStatusId: null,
 }
 
@@ -54,7 +54,7 @@ describe('TodoList', () => {
   })
 
   it('passes onDelete and isDeleting props to TodoItem', () => {
-    const onDelete = vi.fn()
+    const onDelete = vi.fn<(id: string) => void>()
     const wrapper = mount(TodoList, {
       props: {
         ...baseProps,
